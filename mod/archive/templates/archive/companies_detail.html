@@ -1,0 +1,36 @@
+{% extends "main/layout.html" %}
+
+{% block title %}{{ company.title }}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h3>Подрядчик № {{ company.number }}</h3>
+        <table class="table">
+            <tr>
+            {% for el in fields_contr %}
+                {% if el.verbose_name != 'ID' and el.name != 'contracts' %}
+                    <th scope="col">{{ el.verbose_name }}</th>
+                {% endif %}
+            {% endfor %}
+            </tr>
+            <tr>
+                <td>{{ company.title }}</td>
+                <td>{{ company.inn }}</td>
+                <td>{{ company.id }}</td>
+                <td><a href="{% url 'company-update' company.id %}" class="btn btn-warning">Редактировать подрядчика</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="features">
+        <table class="table">
+            <h3>Договоры с подрядчиком</h3>
+            <tr>
+            {% for el in fields_company %}
+                        {% if el != 'ID' and el != 'company' %}
+                            <th scope="col">{{ el }}</th>
+                        {% endif %}
+            {% endfor %}
+            </tr>
+        </table>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "main/layout.html" %}
+
+{% block title %}Изменить подрядчика{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <form method="post">
+            <h4>{{ title }}</h4><br>
+            {% csrf_token %}
+            {{ form.inn }}<br>
+            {{ form.title }}<br>
+            <button class="btn btn-success" type="submit">Внести изменения в контрагента</button><br>
+            <br>
+            <span>{{ error }}</span>
+        </form>
+    </div>
+{% endblock %}

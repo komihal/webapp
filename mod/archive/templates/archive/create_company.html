@@ -1,0 +1,17 @@
+{% extends "main/layout.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <form method="post">
+            <h4>{{ title }}</h4><br>
+            {% csrf_token %}
+            {{ form.inn }}<br>
+            {{ form.title }}<br>
+            <button class="btn btn-success" type="submit">Добавить  контрагента</button><br>
+            <br>
+            <span>{{ error }}</span>
+        </form>
+    </div>
+{% endblock %}

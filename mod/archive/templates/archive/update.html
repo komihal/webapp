@@ -1,0 +1,19 @@
+{% extends "main/layout.html" %}
+
+{% block title %}Архив договоров{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <form method="post">
+            <h4>{{ title }}</h4><br>
+            {% csrf_token %}
+            {{ form.number }}<br>
+            {{ form.title }}<br>
+            {{ form.price }}<br>
+            {{ form.date }}<br>
+            <button class="btn btn-success" type="submit">Внести изменения в договор</button><br>
+            <br>
+            <span>{{ error }}</span>
+        </form>
+    </div>
+{% endblock %}

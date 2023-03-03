@@ -1,0 +1,61 @@
+{% extends "main/index.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <div  class="head">
+            <a href="{% url 'create_act' %}"><button type="button" class="btn btn-outline-success"><i class="bi bi-plus"></i>Создать акт</button></a>
+        </div>
+        <h3>{{ title }}</h3>
+        <div class="table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">№ Договора.</th>
+                  <th scope="col">№ Акта.</th>
+                  <th scope="col">Наименование</th>
+                  <th scope="col">Дата</th>
+                  <th scope="col">Цена</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for el in acts %}
+                    <tr>
+                        <td>{{ el.contract.number }}</td>
+                        <td>{{ el.number }}</td>
+                        <td>{{ el.title }}</td>
+                        <td>{{ el.date }}</td>
+                        <td>{{ el.price }}</td>
+                        <td><a href="{% url 'acts-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'acts-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
+
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+<!--            <table class="table">-->
+<!--              <thead>-->
+<!--                <tr>-->
+<!--                  <th scope="col">№Договора</th>-->
+<!--                  <th scope="col">Название</th>-->
+<!--                  <th scope="col">дата договора</th>-->
+<!--                  <th scope="col">цена договора</th>-->
+<!--                </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--                {% for el in contracts %}-->
+<!--                    <tr>-->
+<!--                        <td>{{ el.number }}</td>-->
+<!--                        <td>{{ el.title }}</td>-->
+<!--                        <td>{{ el.date }}</td>-->
+<!--                        <td>{{ el.price }}</td>-->
+<!--                        <td><a href="{% url 'acts-detail' el.id %}" class="btn btn-warning">Обзор</a></td>-->
+<!--                        <td><a href="{% url 'acts-delete' el.id %}" class="btn btn-danger">Удалить</a></td>-->
+<!--                    </tr>-->
+<!--                {% endfor %}-->
+<!--              </tbody>-->
+<!--            </table>-->
+        </div>
+    </div>
+{% endblock %}

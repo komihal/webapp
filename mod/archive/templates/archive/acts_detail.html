@@ -1,0 +1,15 @@
+{% extends "main/layout.html" %}
+
+{% block title %}Акт №{{ act.number }}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>{{ act.title }}</h1>
+        <p>Номер акта: {{ act.number }}</p>
+        <p>Стоимость акта - {{ act.price }}</p>
+        <p>Дата акта - {{ act.date }}</p>
+        <p>{{ contr.date }}</p>
+        <p><a href="{% url 'acts-update' act.id %}" class="btn btn-warning">Редактировать акт</a></p>
+    </div>
+
+{% endblock %}

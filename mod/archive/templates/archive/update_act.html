@@ -1,0 +1,20 @@
+{% extends "main/layout.html" %}
+
+{% block title %}Редактировать акт{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <form method="post">
+            <h4>{{ title }}</h4><br>
+            {% csrf_token %}
+            {{ form.contract }}<br>
+            {{ form.number }}<br>
+            {{ form.title }}<br>
+            {{ form.price }}<br>
+            {{ form.date }}<br>
+            <button class="btn btn-success" type="submit">Внести изменения в акт</button><br>
+            <br>
+            <span>{{ error }}</span>
+        </form>
+    </div>
+{% endblock %}
