@@ -4,19 +4,17 @@
 
 {% block content %}
     <div class="features">
-        <h3>Подрядчик № {{ company.number }}</h3>
+        <h3>Подрядчик № {{ company.fields }}</h3>
         <table class="table">
             <tr>
-            {% for el in fields_contr %}
-                {% if el.verbose_name != 'ID' and el.name != 'contracts' %}
-                    <th scope="col">{{ el.verbose_name }}</th>
-                {% endif %}
-            {% endfor %}
-            </tr>
+                {% for el in fields_companie %}
+                    {% if el.name != 'id' and el.name != 'contracts' %}
+                         <th scope="col">{{ el.verbose_name }}</th>
+                    {% endif %}
+                {% endfor %}
             <tr>
                 <td>{{ company.title }}</td>
                 <td>{{ company.inn }}</td>
-                <td>{{ company.id }}</td>
                 <td><a href="{% url 'company-update' company.id %}" class="btn btn-warning">Редактировать подрядчика</a></td>
             </tr>
         </table>
@@ -25,12 +23,26 @@
         <table class="table">
             <h3>Договоры с подрядчиком</h3>
             <tr>
-            {% for el in fields_company %}
-                        {% if el != 'ID' and el != 'company' %}
-                            <th scope="col">{{ el }}</th>
-                        {% endif %}
+            {% for el in fields_contr %}
+                {% if el.verbose_name != 'ID' and el.name != 'acts' and el.verbose_name != 'company' %}
+                <th scope="col">{{ el.verbose_name }}</th>
+                {% endif %}
             {% endfor %}
             </tr>
+                {% for el in contracts %}
+                    {% if el.company.title == company.title %}
+                        <tr>
+                            <td>{{ el.number }}</td>
+                            <td>{{ el.title }}</td>
+                            <td>{{ el.date }}</td>
+                            <td>{{ el.price }}</td>
+                            <td>{{ el.company }}</td>
+                            <td>{{ company.title }}</td>
+                            <td><a href="{% url 'contract-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
+                            <td><a href="{% url 'contract-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
         </table>
 
 {% endblock %}

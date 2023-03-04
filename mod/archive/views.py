@@ -11,9 +11,11 @@ class ContractHome(ListView):
     template_name = 'archive/contract_home.html'
     context_object_name = 'contracts'
 
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Контракты"
+        context['navbar'] = 'contract'
         return context
 
 class ActHome(ListView):
@@ -24,6 +26,7 @@ class ActHome(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Акты"
+        context['navbar'] = 'act'
         context['contracts'] = Contracts.objects.all()
         return context
 
@@ -35,6 +38,7 @@ class CompanyHome(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Контрагенты"
+        context['navbar'] = 'company'
         return context
 
 def create(request):
@@ -79,14 +83,11 @@ def create_company(request):
     error = ''
     if request.method == 'POST':
         form = CompanyCreateForm(request.POST)
-        print(type(form))
-        # if len(form.fields['inn']) != 10:
-        #     error = 'Проверьте длинну ИНН!'
         if form.is_valid():
             form.save()
             return redirect('company-home')
         else:
-            error = 'Проверьте правильность заполнения формы!'
+            error = form.errors
 
     form = CompanyCreateForm
     title = 'Форма создания контрагента:'
@@ -114,8 +115,6 @@ class ContractDetailView(DetailView):
     def get_fields(self):
         return [(field.name, getattr(self, field.name)) for field in Acts._meta.fields]
         return [(field.name, getattr(self, field.name)) for field in Contracts._meta.fields]
-        return [(field.name, getattr(self, field.name)) for field in Companies._meta.fields]
-
 
 class ContractUpdateView(UpdateView):
     model = Contracts
@@ -172,7 +171,6 @@ class CompanyDetailView(DetailView):
 
     def get_fields(self):
         return [(field.name, getattr(self, field.name)) for field in Companies._meta.fields]
-        return [(field.name, getattr(self, field.name)) for field in Contracts._meta.fields]
 
 class CompanyUpdateView(UpdateView):
     model = Companies

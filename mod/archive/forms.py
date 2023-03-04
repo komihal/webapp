@@ -1,5 +1,5 @@
 from .models import Contracts, Acts, Companies
-from django.forms import ModelForm, TextInput, NumberInput, DateInput, Select, IntegerField
+from django.forms import ModelForm, TextInput, NumberInput, DateInput, Select, IntegerField, ModelChoiceField
 
 
 class CompanyUpdForm(ModelForm):
@@ -75,6 +75,7 @@ class DateInput(DateInput):
     input_type = 'date'
 
 class ContractCreateForm(ModelForm):
+
     class Meta:
         model = Contracts
         fields = ['title', 'number', 'price', 'date']
@@ -105,9 +106,10 @@ class ActCreateForm(ModelForm):
         fields = ['contract', 'title', 'number', 'price', 'date']
 
         widgets = {
-            'contract': Select(attrs={
+            'contract':
+                Select(attrs={
                 'class': 'form-control',
-                'placeholder': 'Договор'
+                'placeholder': 'Договор',
             }),
             'title': TextInput(attrs={
                 'class': 'form-control',

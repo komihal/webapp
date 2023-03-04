@@ -28,14 +28,18 @@ aside ul li {
     display: block;
     margin-top: 20px;
     text-decoration: none;
-    transition: transform .6s ease;
+    transition: transform .9s ease;
 }
 
 aside ul li:hover, aside ul a:hover {
     vertical-align: middle;
     color: #D41C1C;
     text-decoration: none;
-    transform: scale(1.05);
+    transform: scale(1.1);
+}
+
+aside ul .disabled {
+    transform:none;
 }
 
 main .features {
