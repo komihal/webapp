@@ -18,6 +18,7 @@ class ContractHome(ListView):
         context['navbar'] = 'contract'
         return context
 
+
 class ActHome(ListView):
     model = Acts
     template_name = 'archive/acts_home.html'
@@ -30,6 +31,7 @@ class ActHome(ListView):
         context['contracts'] = Contracts.objects.all()
         return context
 
+
 class CompanyHome(ListView):
     model = Companies
     template_name = 'archive/company_home.html'
@@ -40,6 +42,7 @@ class CompanyHome(ListView):
         context['title'] = "Контрагенты"
         context['navbar'] = 'company'
         return context
+
 
 def create(request):
     error = ''
@@ -60,6 +63,7 @@ def create(request):
     }
     return render(request, 'archive/create.html', data)
 
+
 def create_act(request):
     error = ''
     if request.method == 'POST':
@@ -78,6 +82,7 @@ def create_act(request):
         'error':error
     }
     return render(request, 'archive/create_act.html', data)
+
 
 def create_company(request):
     error = ''
@@ -98,6 +103,7 @@ def create_company(request):
     }
     return render(request, 'archive/create_company.html', data)
 
+
 class ContractDetailView(DetailView):
     model = Contracts
     template_name = 'archive/contract_detail.html'
@@ -116,6 +122,7 @@ class ContractDetailView(DetailView):
         return [(field.name, getattr(self, field.name)) for field in Acts._meta.fields]
         return [(field.name, getattr(self, field.name)) for field in Contracts._meta.fields]
 
+
 class ContractUpdateView(UpdateView):
     model = Contracts
     template_name = 'archive/update.html'
@@ -123,10 +130,12 @@ class ContractUpdateView(UpdateView):
 
     form_class = ContractUpdForm
 
+
 class ContractDeleteView(DeleteView):
     model = Contracts
     success_url = reverse_lazy('contract-home')
     template_name = 'archive/contract-delete.html'
+
 
 class ActDetailView(DetailView):
     model = Acts
@@ -139,6 +148,7 @@ class ActDetailView(DetailView):
         context['contr'] = Contracts.objects.filter(acts=self.get_object())
         return context
 
+
 class ActUpdateView(UpdateView):
     model = Acts
     template_name = 'archive/update_act.html'
@@ -146,15 +156,18 @@ class ActUpdateView(UpdateView):
 
     form_class = ActUpdForm
 
+
 class ActDeleteView(DeleteView):
     model = Acts
     success_url = reverse_lazy('acts')
     template_name = 'archive/contract-delete.html'
 
+
 class CompanyDeleteView(DeleteView):
     model = Companies
     success_url = reverse_lazy('company-home')
     template_name = 'archive/contract-delete.html'
+
 
 class CompanyDetailView(DetailView):
     model = Companies
@@ -171,6 +184,7 @@ class CompanyDetailView(DetailView):
 
     def get_fields(self):
         return [(field.name, getattr(self, field.name)) for field in Companies._meta.fields]
+
 
 class CompanyUpdateView(UpdateView):
     model = Companies
