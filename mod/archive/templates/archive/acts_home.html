@@ -27,35 +27,13 @@
                         <td>{{ el.title }}</td>
                         <td>{{ el.date }}</td>
                         <td>{{ el.price }}</td>
-                        <td><a href="{% url 'acts-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'contract-detail' el.contract.id %}" class="btn btn-warning">Обзор</a></td>
                         <td><a href="{% url 'acts-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
-
                     </tr>
                 {% endfor %}
               </tbody>
             </table>
-<!--            <table class="table">-->
-<!--              <thead>-->
-<!--                <tr>-->
-<!--                  <th scope="col">№Договора</th>-->
-<!--                  <th scope="col">Название</th>-->
-<!--                  <th scope="col">дата договора</th>-->
-<!--                  <th scope="col">цена договора</th>-->
-<!--                </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
-<!--                {% for el in contracts %}-->
-<!--                    <tr>-->
-<!--                        <td>{{ el.number }}</td>-->
-<!--                        <td>{{ el.title }}</td>-->
-<!--                        <td>{{ el.date }}</td>-->
-<!--                        <td>{{ el.price }}</td>-->
-<!--                        <td><a href="{% url 'acts-detail' el.id %}" class="btn btn-warning">Обзор</a></td>-->
-<!--                        <td><a href="{% url 'acts-delete' el.id %}" class="btn btn-danger">Удалить</a></td>-->
-<!--                    </tr>-->
-<!--                {% endfor %}-->
-<!--              </tbody>-->
-<!--            </table>-->
+
         </div>
     </div>
 {% endblock %}

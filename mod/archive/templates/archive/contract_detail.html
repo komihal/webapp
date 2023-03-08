@@ -19,13 +19,16 @@
                 <td>{{ contract.price }}</td>
                 <td>{{ contract.date }}</td>
                 <td>{{ company.title }}</td>
+                <td><a href="{% url 'contract-update' contract.id %}" class="btn btn-warning">Изменить</a></td>
             </tr>
         </table>
-        <a href="{% url 'create_act' %}" class="btn btn-primary"><i class="bi bi-plus"></i>Создать акт</a>
     </div>
     <div class="features">
         <table class="table">
-            <h3>Акты к договору</h3>
+            <div class="row mb-3">
+                <h3 class="col-md-9">Акты к договору</h3>
+                <a href="{% url 'create_act' %}" class="btn btn-primary col-md-2"><i class="bi bi-plus"></i>Создать акт</a>
+            </div>
             <tr>
             {% for el in fields_act %}
                         {% if el != 'ID' and el != 'contract' %}
@@ -40,7 +43,7 @@
                         <td>{{ el.title }}</td>
                         <td>{{ el.price }}</td>
                         <td>{{ el.date }}</td>
-                        <td><a href="{% url 'acts-update' el.id %}" class="btn btn-warning">Редактировать акт</a></td>
+                        <td><a href="{% url 'acts-update' el.id %}" class="btn btn-warning">Изменить</a></td>
                     </tr>
                 {% endif %}
             {% endfor %}

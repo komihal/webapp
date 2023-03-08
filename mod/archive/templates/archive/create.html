@@ -7,6 +7,7 @@
         <form method="post">
             <h4>{{ title }}</h4><br>
             {% csrf_token %}
+            {{ form.company }}<br>
             {{ form.number }}<br>
             {{ form.title }}<br>
             {{ form.price }}<br>

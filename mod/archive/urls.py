@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import pageNotFound
 
 urlpatterns = [
     path("", views.CompanyHome.as_view(), name="company-home"),
@@ -15,7 +16,12 @@ urlpatterns = [
     path('acts/<int:pk>', views.ActDetailView.as_view(), name="acts-detail"),
     path('acts/<int:pk>/update', views.ActUpdateView.as_view(), name="acts-update"),
     path('acts/<int:pk>/delete', views.ActDeleteView.as_view(), name="acts-delete"),
-    path('companies/<int:pk>', views.CompanyDetailView.as_view(), name="companies-detail"),
-    path('companies/<int:pk>/update', views.CompanyUpdateView.as_view(), name="company-update"),
-    path('companies/<int:pk>/delete', views.CompanyDeleteView.as_view(), name="company-delete"),
+    path('companies/<slug:comp_slug>', views.CompanyDetailView.as_view(), name="companies-detail"),
+    path('companies/<slug:comp_slug>/update', views.CompanyUpdateView.as_view(), name="company-update"),
+    path('companies/<slug:comp_slug>/delete', views.CompanyDeleteView.as_view(), name="company-delete"),
 ]
+
+handler404 = pageNotFound
+# handler500
+# handler403
+# handler400

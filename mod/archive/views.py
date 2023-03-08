@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .models import Contracts, Acts, Companies
@@ -85,21 +86,20 @@ def create_act(request):
 
 
 def create_company(request):
-    error = ''
     if request.method == 'POST':
         form = CompanyCreateForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('company-home')
         else:
-            error = form.errors
+            form.add_error(None, "Ошибка в заполнении формы!")
+    else:
+        form = CompanyCreateForm()
 
-    form = CompanyCreateForm
     title = 'Форма создания контрагента:'
     data = {
         'form': form,
         'title': title,
-        'error': error
     }
     return render(request, 'archive/create_company.html', data)
 
@@ -173,6 +173,7 @@ class CompanyDetailView(DetailView):
     model = Companies
     template_name = 'archive/companies_detail.html'
     context_object_name = 'company'
+    slug_url_kwarg = 'comp_slug'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -192,6 +193,10 @@ class CompanyUpdateView(UpdateView):
     context_object_name = 'company'
 
     form_class = CompanyUpdForm
+
+
+def pageNotFound(request, exception):
+                 return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
 

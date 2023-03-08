@@ -17,22 +17,22 @@
                 </tr>
               </thead>
               <tbody>
-                {% for el in company %}
+                {% for comp in company %}
                     <tr>
-                        <td>{{ el.inn }}</td>
-                        <td>{{ el.title }}</td>
-                        <td><a href="{% url 'companies-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
-                        <td><a href="{% url 'company-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
+                        <td>{{ comp.inn }}</td>
+                        <td>{{ comp.title }}</td>
+                        <td><a href="{% url 'companies-detail' comp.slug %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'company-delete' comp.slug %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}
-                {% for el in acts %}
+                {% for act in acts %}
                     <tr>
-                        <td>{{ el.number }}</td>
-                        <td>{{ el.title }}</td>
-                        <td>{{ el.date }}</td>
-                        <td>{{ el.price }}</td>
-                        <td><a href="{% url 'companies-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
-                        <td><a href="{% url 'company-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
+                        <td>{{ act.number }}</td>
+                        <td>{{ act.title }}</td>
+                        <td>{{ act.date }}</td>
+                        <td>{{ act.price }}</td>
+                        <td><a href="{% url 'companies-detail' act.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'company-delete' act.id %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}
               </tbody>

@@ -3,26 +3,22 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-{% if form.errors %}
-     <div class="alert alert-danger">
-        <ul>
-            {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-{% else %}
-    <div class="features">
-        <form method="post">
-            <h4>{{ title }}</h4><br>
-            {% csrf_token %}
-            {{ form.inn }}<br>
-            {{ form.title }}<br>
-            <button class="btn btn-success" type="submit">Добавить  контрагента</button><br>
-            <br>
-            <span>{{ error }}</span>
-        </form>
-
-    </div>
-{% endif %}
+<div class="features">
+    <form method="post">
+        <h4>{{ title }}</h4><br>
+        {% csrf_token %}
+        {% for f in form %}
+            <ul><label class="form-label" for="{{ f.id_for_label}}">{{ f.label }}</label>{{ f }}</ul>
+            {% if f.errors %}
+                <ul class="alert alert-danger" role="alert">
+                {{ f.errors }}
+                </ul>
+            {% endif %}
+        {% endfor %}
+        <button class="btn btn-success" type="submit">Добавить  контрагента</button><br><br>
+        {% for error in form.non_field_errors %}
+            <ul class="alert alert-danger">{{ error }}</ul>
+        {% endfor %}
+    </form>
+</div>
 {% endblock %}

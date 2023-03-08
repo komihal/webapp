@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 from .models import Contracts, Acts, Companies
 from django.forms import ModelForm, TextInput, NumberInput, DateInput, Select, ModelChoiceField
 
@@ -16,7 +18,7 @@ class CompanyUpdForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Номер ИНН'
             })
-            }
+        }
 
 
 class ContractUpdForm(ModelForm):
@@ -41,7 +43,7 @@ class ContractUpdForm(ModelForm):
                 'input_type': "date",
                 'class': 'form-control datetimepicker-input'
             })
-            }
+        }
 
 
 class ActUpdForm(ModelForm):
@@ -70,7 +72,7 @@ class ActUpdForm(ModelForm):
                 'input_type': "date",
                 'class': 'form-control datetimepicker-input'
             })
-            }
+        }
 
 
 class DateInput(DateInput):
@@ -78,11 +80,20 @@ class DateInput(DateInput):
 
 
 class ContractCreateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['company'].empty_label = "Контрагент не выбран"
+        self.fields['company'].label = "Контрагент"
+
     class Meta:
         model = Contracts
-        fields = ['title', 'number', 'price', 'date', 'retention_rate']
+        fields = ['company', 'title', 'number', 'price', 'date', 'retention_rate']
 
         widgets = {
+            'company': Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Контрагент',
+            }),
             'title': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Название договора'
@@ -103,7 +114,7 @@ class ContractCreateForm(ModelForm):
                 'input_type': "date",
                 'class': 'form-control datetimepicker-input'
             })
-            }
+        }
 
 
 class ActCreateForm(ModelForm):
@@ -136,7 +147,8 @@ class ActCreateForm(ModelForm):
                 'input_type': "date",
                 'class': 'form-control datetimepicker-input'
             })
-            }
+        }
+
 
 class CompanyCreateForm(ModelForm):
     class Meta:
@@ -145,8 +157,8 @@ class CompanyCreateForm(ModelForm):
 
         widgets = {
             'inn': NumberInput(attrs={
-                'maxlength': 10,
-                'minlength': 10,
+                # 'maxlength': 10,
+                # 'minlength': 10,
                 'class': 'form-control',
                 'placeholder': 'ИНН компании (10 символов)'
             }),
@@ -154,4 +166,10 @@ class CompanyCreateForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Название Контрагента'
             })
-            }
+        }
+
+    def clean_inn(self):
+        inn = self.cleaned_data['inn']
+        if len(str(inn)) != 10:
+            raise ValidationError('ИНН должен содержать 10 символов')
+        return inn
