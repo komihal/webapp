@@ -27,7 +27,7 @@
                         <td>{{ el.title }}</td>
                         <td>{{ el.date }}</td>
                         <td>{{ el.price }}</td>
-                        <td><a href="{% url 'contract-detail' el.contract.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'contract-detail' el.contract.id %}" class="btn btn-warning">Детали</a></td>
                         <td><a href="{% url 'acts-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}

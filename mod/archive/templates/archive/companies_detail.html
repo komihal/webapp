@@ -15,7 +15,7 @@
             <tr>
                 <td>{{ company.title }}</td>
                 <td>{{ company.inn }}</td>
-                <td><a href="{% url 'company-update' company.id %}" class="btn btn-warning">Изменить</a></td>
+                <td><a href="{% url 'company-update' company.slug %}" class="btn btn-warning">Изменить</a></td>
             </tr>
         </table>
     </div>
@@ -38,7 +38,7 @@
                             <td>{{ el.price }}</td>
                             <td>{{ el.company }}</td>
                             <td>{{ company.title }}</td>
-                            <td><a href="{% url 'contract-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
+                            <td><a href="{% url 'contract-detail' el.id %}" class="btn btn-warning">Детали</a></td>
                             <td><a href="{% url 'contract-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
                         </tr>
                     {% endif %}

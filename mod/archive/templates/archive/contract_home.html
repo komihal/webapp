@@ -27,7 +27,7 @@
                         <td>{{ el.date }}</td>
                         <td>{{ el.price }}</td>
                         <td>{{ el.retention_rate }}</td>
-                        <td><a href="{% url 'contract-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'contract-detail' el.id %}" class="btn btn-warning">Детали</a></td>
                         <td><a href="{% url 'contract-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}
@@ -37,7 +37,7 @@
                         <td>{{ el.title }}</td>
                         <td>{{ el.date }}</td>
                         <td>{{ el.price }}</td>
-                        <td><a href="{% url 'acts-detail' el.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'acts-detail' el.id %}" class="btn btn-warning">Детали</a></td>
                         <td><a href="{% url 'acts-delete' el.id %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}

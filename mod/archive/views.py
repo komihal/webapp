@@ -1,9 +1,9 @@
 from django.http import HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Contracts, Acts, Companies
 from .forms import ContractCreateForm, ContractUpdForm, ActCreateForm, ActUpdForm, CompanyCreateForm, CompanyUpdForm
-from django.views.generic import DetailView, UpdateView, DeleteView, ListView
+from django.views.generic import DetailView, UpdateView, DeleteView, ListView, CreateView
 from operator import attrgetter
 
 
@@ -12,10 +12,9 @@ class ContractHome(ListView):
     template_name = 'archive/contract_home.html'
     context_object_name = 'contracts'
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Контракты"
+        context['title'] = "Договоры"
         context['navbar'] = 'contract'
         return context
 
@@ -45,74 +44,74 @@ class CompanyHome(ListView):
         return context
 
 
-def create(request):
-    error = ''
-    if request.method == 'POST':
-        form = ContractCreateForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('contract-home')
-        else:
-            error = 'Проверьте корректность заполнения формы!'
+class ContractCreateView(CreateView):
+    form_class = ContractCreateForm
+    template_name = 'archive/create.html'
+    success_url = reverse_lazy("contract-home")
 
-    form = ContractCreateForm
-    title = 'Форма создания договора:'
-    data = {
-        'form': form,
-        'title':title,
-        'error':error
-    }
-    return render(request, 'archive/create.html', data)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Новый контракт"
+        context['navbar'] = 'contract'
+        return context
 
 
-def create_act(request):
-    error = ''
-    if request.method == 'POST':
-        form = ActCreateForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('acts')
-        else:
-            error = 'Проверьте корректность заполнения формы!'
+class ActCreateView(CreateView):
+    form_class = ActCreateForm
+    template_name = 'archive/create_act.html'
+    success_url = reverse_lazy("acts")
 
-    form = ActCreateForm
-    title = 'Форма создания акта:'
-    data = {
-        'form': form,
-        'title':title,
-        'error':error
-    }
-    return render(request, 'archive/create_act.html', data)
+    def __init__(self):
+        self.pk = ""
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Новый акт"
+        context['navbar'] = 'act'
+        if self.pk != "":
+            context['contract'] = Contracts.objects.all()
+        elif self.kwargs['pk']:
+            context['pk'] = self.kwargs['pk']
+            context['contract'] = Contracts.objects.get(id=self.kwargs['pk'])
+        return context
+
+    def get_initial(self):
+        if self.pk != "":
+            contract = Contracts.objects.all()
+            return ()
+        elif self.kwargs['pk']:
+            contract = get_object_or_404(Contracts, id=self.kwargs.get('pk'))
+            retention_rate = contract.retention_rate
+            company = contract.company
+            return {
+                'contract': contract,
+                'warranty_percent': retention_rate,
+            }
 
 
-def create_company(request):
-    if request.method == 'POST':
-        form = CompanyCreateForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('company-home')
-        else:
-            form.add_error(None, "Ошибка в заполнении формы!")
-    else:
-        form = CompanyCreateForm()
 
-    title = 'Форма создания контрагента:'
-    data = {
-        'form': form,
-        'title': title,
-    }
-    return render(request, 'archive/create_company.html', data)
+class CompanyCreateView(CreateView):
+    form_class = CompanyCreateForm
+    template_name = 'archive/create_company.html'
+    success_url = reverse_lazy("company-home")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Новый контрагент"
+        context['navbar'] = 'company'
+        return context
 
 
 class ContractDetailView(DetailView):
     model = Contracts
     template_name = 'archive/contract_detail.html'
     context_object_name = 'contract'
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Акты"
+        context['title'] = "Детали контракта"
         context['acts'] = Acts.objects.all()
+        context['pk'] = self.kwargs['pk']
+        context['navbar'] = 'contract'
         context['company'] = Companies.objects.all()
         context['fields_act'] = [field.verbose_name for field in Acts._meta.get_fields()]
         context['fields_contr'] = Contracts._meta.get_fields()
@@ -130,11 +129,23 @@ class ContractUpdateView(UpdateView):
 
     form_class = ContractUpdForm
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Редактировать контракт"
+        context['navbar'] = 'contract'
+        return context
+
 
 class ContractDeleteView(DeleteView):
     model = Contracts
     success_url = reverse_lazy('contract-home')
     template_name = 'archive/contract-delete.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Удалить контракт"
+        context['navbar'] = 'contract'
+        return context
 
 
 class ActDetailView(DetailView):
@@ -146,6 +157,8 @@ class ActDetailView(DetailView):
         # xxx will be available in the template as the related objects
         context = super(ActDetailView, self).get_context_data(**kwargs)
         context['contr'] = Contracts.objects.filter(acts=self.get_object())
+        context['title'] = "Детали акта"
+        context['navbar'] = 'act'
         return context
 
 
@@ -153,8 +166,13 @@ class ActUpdateView(UpdateView):
     model = Acts
     template_name = 'archive/update_act.html'
     context_object_name = 'act'
-
     form_class = ActUpdForm
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Редактировать акт"
+        context['navbar'] = 'act'
+        return context
 
 
 class ActDeleteView(DeleteView):
@@ -162,11 +180,24 @@ class ActDeleteView(DeleteView):
     success_url = reverse_lazy('acts')
     template_name = 'archive/contract-delete.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Удалить акт"
+        context['navbar'] = 'act'
+        return context
+
 
 class CompanyDeleteView(DeleteView):
     model = Companies
     success_url = reverse_lazy('company-home')
     template_name = 'archive/contract-delete.html'
+    slug_url_kwarg = 'comp_slug'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Детали контрагента"
+        context['navbar'] = 'company'
+        return context
 
 
 class CompanyDetailView(DetailView):
@@ -177,7 +208,8 @@ class CompanyDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Контрагенты"
+        context['title'] = "Детали контрагента"
+        context['navbar'] = 'company'
         context['contracts'] = Contracts.objects.all()
         context['fields_contr'] = [field for field in Contracts._meta.get_fields()]
         context['fields_companie'] = Companies._meta.get_fields()
@@ -191,8 +223,15 @@ class CompanyUpdateView(UpdateView):
     model = Companies
     template_name = 'archive/update_company.html'
     context_object_name = 'company'
+    slug_url_kwarg = 'comp_slug'
 
     form_class = CompanyUpdForm
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Детали контрагента"
+        context['navbar'] = 'company'
+        return context
 
 
 def pageNotFound(request, exception):

@@ -1,20 +1,116 @@
 {% extends "main/layout.html" %}
-
+{% load static %}
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="features">
-        <form method="post">
-            <h4>{{ title }}</h4><br>
-            {% csrf_token %}
-            {{ form.contract }}<br>
-            {{ form.number }}<br>
-            {{ form.title }}<br>
-            {{ form.price }}<br>
-            {{ form.date }}<br>
-            <button class="btn btn-success" type="submit">Добавить  акт</button><br>
-            <br>
-            <span>{{ error }}</span>
-        </form>
+<div class="accordion accordion-flush features " id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Информация по договору
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+          <div class="alert alert-secondary">
+            <table class="table table-sm" >
+            <h5 class="text-primary">Данные по договору</h5>
+            {% for name, ver_name, value in contract.get_fields %}
+                {% if name != 'id' %}
+                   <tr><td> {{ ver_name }} </td>
+                   <td> {{ value }}</td></tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+          </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<div class="features">
+    <form method="post">
+        <h4>{{ title }}</h4><br>
+        {% csrf_token %}
+        <h6>Данные акта:</h6>
+        {{ form.number }}<br>
+        {{ form.title }}<br>
+        {{ form.price }}<br>
+        {{ form.warranty_percent }}<br>
+        {{ form.warranty_retention }}<br>
+        {{ form.date }}<br>
+        <button class="btn btn-success" type="submit">Добавить  акт</button><br>
+        <br>
+        <span>{{ error }}</span>
+    </form>
+</div>
+<div class="features">
+    <form class="row g-3 needs-validation" novalidate>
+      <div class="col-md-4">
+        <label class="form-label">Наименование</label>
+            {{ form.title }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">№ Акта</label>
+            {{ form.number }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Цена</label>
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="inputGroupPrepend">₽</span>
+          {{ form.price }}
+          <div class="invalid-feedback">
+            Проверьте правильность заполнения.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="validationCustom03" class="form-label">Детальное описание</label>
+        <input type="text" class="form-control" id="validationCustom03" required>
+        <div class="invalid-feedback">
+          Проверьте правильность заполнения.
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="validationCustom04" class="form-label">Номер договора </label>
+        <select class="form-select" id="validationCustom04" required>
+          <option selected disabled value="">Выберите договор...</option>
+          <option>...</option>
+        </select>
+        <div class="invalid-feedback">
+          Проверьте правильность заполнения.
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="validationCustom05" class="form-label">Авансы</label>
+        <input type="text" class="form-control" id="validationCustom05" required>
+        <div class="invalid-feedback">
+          Проверьте правильность заполнения.
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+          <label class="form-check-label" for="invalidCheck">
+            Рассчитать удержания на основании договора
+          </label>
+          <div class="invalid-feedback">
+            You must agree before submitting.
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Добавить акт</button>
+      </div>
+    </form>
+</div>
+
+<script>
+calculate = function()
+{
+    var resources = document.getElementById('a1').value;
+    var minutes = document.getElementById('a2').value;
+    document.getElementById('a3').value = Number((parseFloat(resources)*parseFloat(minutes)).toFixed(2));
+   }
+</script>
 {% endblock %}

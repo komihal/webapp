@@ -1,17 +1,17 @@
 aside div {
-    float: left;
+    float:left;
     text-decoration: none;
-    width: 23%;
-    max-width: 260px;
-    min-width: 200px;
-    padding:2%;
+    width: 20%;
+    max-width: 200px;
+    min-width: 150px;
+    padding:1%;
     height: 1000vh;
-    border-right: 1px solid #4d4d4d;
+    border-right: 1px solid #dbd9d9;
 }
 
 aside h3 {
 font-size: 20px;
-margin-top: 50px;
+margin-top: 10px;
 font-weight: bold;
 }
 
@@ -26,7 +26,7 @@ aside ul, aside a {
 
 aside ul li {
     display: block;
-    margin-top: 20px;
+    margin-top: 5px;
     text-decoration: none;
     transition: transform .9s ease;
 }
@@ -45,29 +45,48 @@ aside ul .disabled {
 main .features {
     float: left;
     color: #000000;
-    margin-top: 20px;
-    text-align: center;
+    margin-left: 25px;
+    margin-top: 0px;
+    text-align: left;
     width: 75%;
+}
+
+
+main div .rounded {
+    background-color: #dee2e6;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+    padding: 20px;
+    text-align: left;
+    max-width: 700px;
 }
 
 main .features h1 {font-seze: 50px;}
 main .features p {max-width: 1000px;margin: 20px auto}
 
+aside .nav-pills .nav-link {
+    background: 0 0;
+    border: 0;
+    border-radius: var(--bs-nav-pills-border-radius);
+    text-align: left;
+}
+
 form {
-    margin-left: 22%;
-    width: 500px;
+    margin-left: 5%;
+    width: 100%;
     margin-top:10px;
 }
 
 main .table {
     text-align: left;
-    margin-left: 25px;
+    margin-left: 0px;
     width: 100%
 }
 
 main .head {
     padding:2.5%;
-    margin-left: -30px;
+    margin-left: 0px;
     text-align: right;
     width: 100%;
     display:inline-block;
@@ -130,8 +149,6 @@ white-space: nowrap;
 -webkit-overflow-scrolling: touch;
 }
 
-}
-
 @keyframes rotateSpinner {
     from {
         transform:rotate(0deg);
@@ -154,6 +171,14 @@ white-space: nowrap;
     left: calc(50% - 16px);
     width: 32px;
     height: 32px;
+}
+
+
+.col-sm-3 {
+    flex: 0 0 auto;
+    width: 25%;
+    margin-bottom: 5px;
+    margin-right: 0px;
 }
 
 #en-markup-loading-spinner img {

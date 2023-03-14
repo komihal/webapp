@@ -2,11 +2,10 @@
 
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-
-    <div class="features">
-        <div  class="head">
-            <a href="{% url 'create-company' %}"><button type="button" class="btn btn-outline-danger"><i class="bi bi-plus"></i>Создать контрагента</button></a>
-        </div>
+    <div class="features alert alert-secondary">
+        <a href="{% url 'create-company' %}"><button type="button" class="btn btn-outline-danger"><i class="bi bi-plus"></i>Создать контрагента</button></a>
+    </div>
+    <div class="features alert alert-secondary">
         <h3>{{ title }}</h3>
         <div class="table">
             <table class="table">
@@ -21,7 +20,7 @@
                     <tr>
                         <td>{{ comp.inn }}</td>
                         <td>{{ comp.title }}</td>
-                        <td><a href="{% url 'companies-detail' comp.slug %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'companies-detail' comp.slug %}" class="btn btn-warning">Детали</a></td>
                         <td><a href="{% url 'company-delete' comp.slug %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}
@@ -31,7 +30,7 @@
                         <td>{{ act.title }}</td>
                         <td>{{ act.date }}</td>
                         <td>{{ act.price }}</td>
-                        <td><a href="{% url 'companies-detail' act.id %}" class="btn btn-warning">Обзор</a></td>
+                        <td><a href="{% url 'companies-detail' act.id %}" class="btn btn-warning">Детали</a></td>
                         <td><a href="{% url 'company-delete' act.id %}" class="btn btn-danger">Удалить</a></td>
                     </tr>
                 {% endfor %}

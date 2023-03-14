@@ -1,5 +1,5 @@
+import calculation
 from django.core.exceptions import ValidationError
-
 from .models import Contracts, Acts, Companies
 from django.forms import ModelForm, TextInput, NumberInput, DateInput, Select, ModelChoiceField
 
@@ -118,6 +118,7 @@ class ContractCreateForm(ModelForm):
 
 
 class ActCreateForm(ModelForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['contract'].empty_label = "Договор не выбран"
@@ -125,7 +126,7 @@ class ActCreateForm(ModelForm):
 
     class Meta:
         model = Acts
-        fields = ['contract', 'title', 'number', 'price', 'date']
+        fields = ['contract', 'title', 'number', 'price', 'date', 'warranty_retention', 'warranty_percent']
         widgets = {
             'contract': Select(attrs={
                 'class': 'form-control',
@@ -141,7 +142,77 @@ class ActCreateForm(ModelForm):
             }),
             'price': NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Цена акта'
+                'placeholder': 'Цена акта',
+                'onchange': 'calcSell()',
+                'id': 'a1',
+                'type': 'number',
+                'onblur': "calculate()",
+            }),
+            'warranty_retention': NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Гарантийное удержание',
+                'id': 'a3',
+                'type': 'number'
+            }),
+            'warranty_percent': NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Процент гарантийного удержания',
+                'id': 'a2',
+                'onblur': "calculate()",
+                'name': "total_amt",
+                'type': 'number'
+            }),
+            'date': DateInput(attrs={
+                'input_type': "date",
+                'class': 'form-control datetimepicker-input'
+            })
+        }
+
+
+class ActContrCreateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['contract'] = "Договор не выбран"
+        self.fields['contract'].label = "Договор"
+
+
+    class Meta:
+        model = Acts
+        fields = ['contract', 'title', 'number', 'price', 'date', 'warranty_retention', 'warranty_percent']
+        widgets = {
+            'contract': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Номер акта',
+            }),
+            'title': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Название акта'
+            }),
+            'number': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Номер акта'
+            }),
+            'price': NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Цена акта',
+                'onchange': 'calcSell()',
+                'id': 'a1',
+                'type': 'number',
+                'onblur': "calculate()",
+            }),
+            'warranty_retention': NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Гарантийное удержание',
+                'id': 'a3',
+                'type': 'number'
+            }),
+            'warranty_percent': NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Процент гарантийного удержания',
+                'id': 'a2',
+                'onblur': "calculate()",
+                'name': "total_amt",
+                'type': 'number'
             }),
             'date': DateInput(attrs={
                 'input_type': "date",

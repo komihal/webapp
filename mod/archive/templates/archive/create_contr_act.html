@@ -1,0 +1,32 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="features">
+    <form method="post">
+        <h4>{{ title }}</h4><br>
+        {% csrf_token %}
+        {{ form.contract }}<br>
+        {{ form.number }}<br>
+        {{ form.title }}<br>
+        {{ form.price }}<br>
+        {{ form.warranty_percent }}<br>
+        {{ form.warranty_retention }}<br>
+        {{ form.date }}<br>
+        <button class="btn btn-success" type="submit">Добавить  акт</button><br>
+        <br>
+        <span>{{ error }}</span>
+    </form>
+</div>
+<script>
+calculate = function()
+{
+    var resources = document.getElementById('a1').value;
+    var minutes = document.getElementById('a2').value;
+    document.getElementById('a3').value = Number((parseFloat(resources)*parseFloat(minutes)).toFixed(2));
+
+   }
+</script>
+{% endblock %}
+

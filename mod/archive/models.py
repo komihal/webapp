@@ -1,5 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
+from unidecode import unidecode
+
 
 
 def validate_inn(value):
@@ -10,16 +13,16 @@ def validate_inn(value):
 
 
 class Contracts(models.Model):
-    title = models.CharField('Название', max_length=120)
     number = models.CharField('Номер', max_length=25, unique=True)
+    title = models.CharField('Название', max_length=120)
     price = models.FloatField('Цена договора', max_length=25)
     date = models.DateField('Дата договора')
     retention_rate = models.FloatField('% гарант. удерж.', max_length=4)
-    company = models.ForeignKey('companies', on_delete=models.PROTECT, null=True)
-    work_stage = models.ForeignKey('WorkStage', on_delete=models.PROTECT, null=True)
+    company = models.ForeignKey('companies', on_delete=models.PROTECT, null=True, verbose_name="Компания")
+    work_stage = models.ForeignKey('WorkStage', on_delete=models.PROTECT, null=True, verbose_name="Вид работ")
 
     def __str__(self):
-        return self.title
+        return self.company.title + " " + self.title + " " + self.number
 
     def get_absolute_url(self):
         return f'/archive/{self.id}'
@@ -28,11 +31,17 @@ class Contracts(models.Model):
         verbose_name = 'Договор'
         verbose_name_plural = 'Договоры'
 
+    def get_fields(self):
+        return [(field.name, field.verbose_name, field.value_to_string(self)) for field in Contracts._meta.fields]
 
 class Companies(models.Model):
     title = models.CharField('Название компании', max_length=120)
     inn = models.IntegerField('ИНН', unique=True, validators=[validate_inn])
-    slug = models.SlugField(max_length=150, null=False, unique=True, db_index=True, verbose_name="URL")
+    slug = models.SlugField(max_length=150, unique=True, db_index=True, verbose_name="URL")
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(unidecode(self.title), allow_unicode=True)
+        super(Companies, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -50,7 +59,8 @@ class Acts(models.Model):
     number = models.CharField('Номер акта', max_length=25, unique=True)
     price = models.FloatField('Цена акта', max_length=25)
     date = models.DateField('Дата акта')
-    warranty_retention = models.FloatField('Цена акта', max_length=25)
+    warranty_retention = models.FloatField('Гарантийное удержание', max_length=25, null=True)
+    warranty_percent = models.FloatField('Процент удержания', max_length=25, null=True)
     contract = models.ForeignKey(Contracts, on_delete=models.PROTECT, null=True)
     def __str__(self):
         return self.title
